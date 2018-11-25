@@ -1,6 +1,10 @@
 import * as R from 'ramda';
 
 const moveKnight = (game, instruction) => {
+  const status = game[instruction.knight][1];
+  if (status !== 'LIVE') {
+    return game;
+  }
   const oldPos = game[instruction.knight][0]
   let newPos;
   switch (instruction.direction) {
