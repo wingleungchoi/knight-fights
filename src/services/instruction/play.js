@@ -1,4 +1,4 @@
-import { EQUIPMENT_NAMES, EQUIPMENT_PRIORITIES } from 'src/constants';
+import { KNIGHT_NAMES, EQUIPMENT_NAMES, EQUIPMENT_PRIORITIES } from 'src/constants';
 import * as R from 'ramda';
 
 const moveKnight = (game, instruction) => {
@@ -44,7 +44,7 @@ const getEquipment = (game, instruction) => {
       (equipment[1] === false) && R.equals(newPos, equipment[0])
     )
   )(game);
-  const a = R.pick(EQUIPMENT_NAMES, notCarriedAndAtThePosEquipments);
+
   if (R.keys(notCarriedAndAtThePosEquipments).length > 0) {
     for (let i = 0; i < EQUIPMENT_PRIORITIES.length; i++) {
       const preferredEquipment = EQUIPMENT_PRIORITIES[i];
@@ -61,6 +61,35 @@ const getEquipment = (game, instruction) => {
   return game;
 }
 
+const fight = (game, instruction) => {
+  const newPos = game[instruction.knight][0];
+  const liveAndAtThePosKnight = R.pipe(
+    R.pick(R.without([instruction.knight], KNIGHT_NAMES)),
+    R.filter((knight, knightName) => (knight[1] === 'LIVE') && R.equals(newPos, knight[0])
+    )
+  )(game);
+
+  if (R.isNil(liveAndAtThePosKnight) || R.isEmpty(liveAndAtThePosKnight)) {
+    // no knight here for fight...
+    return game;
+  }
+
+  const liveAndAtThePosKnightName = R.pipe(
+    R.keys,
+    R.head
+  )(liveAndAtThePosKnight);
+
+  if (game[instruction.knight][3] + 0.5 > liveAndAtThePosKnight[liveAndAtThePosKnightName][4]) {
+    const deadKnight = R.update(1, 'DEAD', liveAndAtThePosKnight[liveAndAtThePosKnightName]);
+    const gameWithEquippedKnights = R.set(R.lensProp(liveAndAtThePosKnightName), deadKnight, game);
+    return gameWithEquippedKnights;
+  }
+
+  const deadKnight = R.update(1, 'DEAD', game[instruction.knight]);
+  const gameWithEquippedKnights = R.set(R.lensProp(instruction.knight), deadKnight, game);
+  return gameWithEquippedKnights
+}
+
 const play = (game, instruction) => {
   const status = game[instruction.knight][1];
   if (status !== 'LIVE') {
@@ -68,7 +97,8 @@ const play = (game, instruction) => {
   }
   const gameAfterMovedKnights = moveKnight(game, instruction);
   const gameAfterGetEquipment = getEquipment(gameAfterMovedKnights, instruction);
-  return gameAfterGetEquipment;
+  const gameAfterFight = fight(gameAfterGetEquipment, instruction);
+  return gameAfterFight;
 }
 
 export {

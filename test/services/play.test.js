@@ -20,7 +20,7 @@ describe('Instruction', () => {
       expect(gameAfterFirstPlay.magic_staff).to.eql([[1, 1], true]);
     });
 
-    it('should not move a drwoned/dead knight', async () => {
+    it('should not move a drownd/dead knight', async () => {
       const newGame = initialize();
       newGame.red = [null, 'DROWNED', null, 0, 0];
       newGame.magic_staff = [[1, 0], true];
@@ -53,6 +53,15 @@ describe('Instruction', () => {
       expect(gameAfterFirstPlay.magic_staff).to.eql([[6, 6], false]);
       expect(gameAfterFirstPlay.dagger).to.eql([[6, 6], false]);
       expect(gameAfterFirstPlay.axe).to.eql([[6, 6], true]);
+    });
+
+    it('should allow basic fight', async () => {
+      const newGame = initialize();
+      newGame.green = [[6, 5], 'LIVE', null, 1, 1];
+      newGame.red = [[6, 6], 'LIVE', null, 1, 1];
+      const gameAfterFirstPlay = play(newGame, {knight: 'green', direction: 'E'});
+      expect(gameAfterFirstPlay.green).to.eql([[6, 6], 'LIVE', null, 1, 1]);
+      expect(gameAfterFirstPlay.red).to.eql([[6, 6], 'DEAD', null, 1, 1]);
     });
   });
 });
