@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as R from 'ramda';
 import * as util from 'util';
-import {  GAME_END, GAME_START, } from 'src/constants';
+import {  GAME_END, GAME_START, KNIGHT_NAME_MAPPING, } from 'src/constants';
 
 fs.readFileAsync = util.promisify(fs.readFile);
 
@@ -20,7 +20,7 @@ const formatInstructionSentences = (instructionSentences) => {
     R.pipe(
       R.split(':'),
       (array) => ({
-        knight: array[0],
+        knight: KNIGHT_NAME_MAPPING[array[0]],
         direction: array[1],
       })
     )(instructionSentence)
