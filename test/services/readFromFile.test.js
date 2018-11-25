@@ -8,23 +8,23 @@ describe('Instruction', () => {
       const instructions = await readFromFile(path.join(process.env.NODE_PATH, 'test', 'fixtures', 'moves.txt'));
       expect(instructions).to.eql([
         {
-          knight: 'R',
+          knight: 'red',
           direction: 'S',
         },
         {
-          knight: 'R',
+          knight: 'red',
           direction: 'S',
         },
         {
-          knight: 'B',
+          knight: 'blue',
           direction: 'E',
         },
         {
-          knight: 'G',
+          knight: 'green',
           direction: 'N',
         },
         {
-          knight: 'Y',
+          knight: 'yellow',
           direction: 'N',
         },
       ])
