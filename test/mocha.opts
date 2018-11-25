@@ -1,0 +1,6 @@
+--timeout 5000
+--require babel-register
+--require babel-polyfill
+--require test/helper.js
+--exit
+test/**/*.test.js

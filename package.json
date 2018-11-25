@@ -4,8 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "NODE_PATH=. ./node_modules/.bin/babel-node index.js",
+    "test": "NODE_PATH=. ./node_modules/mocha/bin/mocha --opts test/mocha.opts"
   },
   "author": "wingleungchoi@gmail.com",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "ramda": "^0.26.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/node": "^7.0.0",
+    "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
+  }
 }
