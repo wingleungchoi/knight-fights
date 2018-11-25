@@ -41,5 +41,18 @@ describe('Instruction', () => {
       expect(gameAfterFirstPlay.green).to.eql([[6, 6], 'LIVE', 'magic_staff', 1, 1]);
       expect(gameAfterFirstPlay.magic_staff).to.eql([[6, 6], true]);
     });
+
+    it('should equip according the priority', async () => {
+      const newGame = initialize();
+      newGame.green = [[6, 5], 'LIVE', null, 1, 1];
+      newGame.magic_staff = [[6, 6], false];
+      newGame.dagger = [[6, 6], false];
+      newGame.axe = [[6, 6], false];
+      const gameAfterFirstPlay = play(newGame, {knight: 'green', direction: 'E'});
+      expect(gameAfterFirstPlay.green).to.eql([[6, 6], 'LIVE', 'axe', 1, 1]);
+      expect(gameAfterFirstPlay.magic_staff).to.eql([[6, 6], false]);
+      expect(gameAfterFirstPlay.dagger).to.eql([[6, 6], false]);
+      expect(gameAfterFirstPlay.axe).to.eql([[6, 6], true]);
+    });
   });
 });
