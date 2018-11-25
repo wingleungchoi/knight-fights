@@ -1,10 +1,17 @@
-import * as fs from 'fs';
-import * as util from 'util';
-fs.readFileAsync = util.promisify(fs.readFile);
+import * as R from 'ramda';
 
-const getInstruction = async (path) => {
-  const buffer = await fs.readFileAsync(path);
-  console.log('buffer', buffer.toString());
-}
+import { play, readFromFile, } from 'src/services/instruction'
+import { initialize } from 'src/models/game';
 
-getInstruction('./moves.txt');
+const start = async () => {
+  const newGame = initialize();
+  const instructions = await readFromFile('moves.txt');
+  const finalResult = R.reduce(
+    (game, instruction) => play(game, instruction),
+    newGame,
+    instructions
+  );
+  console.log('final result:', finalResult);
+};
+
+start();

@@ -2,7 +2,6 @@ import * as R from 'ramda';
 
 const drown = (game, instruction) => {
   const newPos = game[instruction.knight][0];
-  debugger;
   if (newPos[0] < 0 || newPos[0] > 7 || newPos[1] < 0 || newPos[1] > 7) {
     const drownedKnightUnderWater = R.pipe(
       R.update(0, null),
