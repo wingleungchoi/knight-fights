@@ -30,6 +30,8 @@ const fight = (game, instruction) => {
     const deadKnight = R.pipe(
       R.update(1, 'DEAD'),
       R.update(2, null), // drop equipment
+      R.update(3, 0), // 0 attack
+      R.update(4, 0), // 0 defence
     )(liveAndAtThePosKnight[liveAndAtThePosKnightName]);
     const gameWithEquippedKnights = R.set(R.lensProp(liveAndAtThePosKnightName), deadKnight, game);
     if (R.is(String, defenderEquipment)) {
@@ -40,7 +42,12 @@ const fight = (game, instruction) => {
     return gameWithEquippedKnights;
   }
   // attacker dies case
-  const deadKnight = R.update(1, 'DEAD', game[instruction.knight]);
+  const deadKnight = R.pipe(
+    R.update(1, 'DEAD'),
+    R.update(2, null), // drop equipment
+    R.update(3, 0), // 0 attack
+    R.update(4, 0), // 0 defence
+  )(game[instruction.knight]);
   const gameWithEquippedKnights = R.set(R.lensProp(instruction.knight), deadKnight, game);
   if (R.is(String, attackerEquipment)) {
     const droppedEquipment = R.update(1, false, game[attackerEquipment]);

@@ -2,6 +2,7 @@ import * as R from 'ramda';
 
 import { EQUIPMENT_NAMES, EQUIPMENT_PRIORITIES } from 'src/constants';
 import { fight } from 'src/services/instruction/fight';
+import { drown } from 'src/services/instruction/drown';
 
 const moveKnight = (game, instruction) => {
   const oldPos = game[instruction.knight][0]
@@ -24,12 +25,12 @@ const moveKnight = (game, instruction) => {
   }
   const knightWithNewPos = R.update(0, newPos, game[instruction.knight]);
   const gameAfterMovedKnights = R.set(R.lensProp(instruction.knight), knightWithNewPos, game);
-  const carriedEqiupment =  game[instruction.knight][2];
-  if (carriedEqiupment === null) {
+  const carriedEquipment =  game[instruction.knight][2];
+  if (carriedEquipment === null) {
     return gameAfterMovedKnights;
   }
-  const equipmentWithNewPos = R.update(0, newPos, game[carriedEqiupment]);
-  const gameAfterMovedKnightsAndEquipments = R.set(R.lensProp(carriedEqiupment), equipmentWithNewPos, gameAfterMovedKnights);
+  const equipmentWithNewPos = R.update(0, newPos, game[carriedEquipment]);
+  const gameAfterMovedKnightsAndEquipments = R.set(R.lensProp(carriedEquipment), equipmentWithNewPos, gameAfterMovedKnights);
   return gameAfterMovedKnightsAndEquipments;
 }
 
@@ -69,7 +70,12 @@ const play = (game, instruction) => {
     return game;
   }
   const gameAfterMovedKnights = moveKnight(game, instruction);
-  const gameAfterGetEquipment = getEquipment(gameAfterMovedKnights, instruction);
+  const gameAfterDrowningKnight = drown(gameAfterMovedKnights, instruction);
+  const updatedStatus = gameAfterDrowningKnight[instruction.knight][1];
+  if (updatedStatus === 'DROWNED') {
+    return gameAfterDrowningKnight;
+  }
+  const gameAfterGetEquipment = getEquipment(gameAfterDrowningKnight, instruction);
   const gameAfterFight = fight(gameAfterGetEquipment, instruction);
   return gameAfterFight;
 }
