@@ -1,5 +1,7 @@
-import { KNIGHT_NAMES, EQUIPMENT_NAMES, EQUIPMENT_PRIORITIES } from 'src/constants';
 import * as R from 'ramda';
+
+import { EQUIPMENT_NAMES, EQUIPMENT_PRIORITIES } from 'src/constants';
+import { fight } from 'src/services/instruction/fight';
 
 const moveKnight = (game, instruction) => {
   const oldPos = game[instruction.knight][0]
@@ -59,35 +61,6 @@ const getEquipment = (game, instruction) => {
     }
   }
   return game;
-}
-
-const fight = (game, instruction) => {
-  const newPos = game[instruction.knight][0];
-  const liveAndAtThePosKnight = R.pipe(
-    R.pick(R.without([instruction.knight], KNIGHT_NAMES)),
-    R.filter((knight, knightName) => (knight[1] === 'LIVE') && R.equals(newPos, knight[0])
-    )
-  )(game);
-
-  if (R.isNil(liveAndAtThePosKnight) || R.isEmpty(liveAndAtThePosKnight)) {
-    // no knight here for fight...
-    return game;
-  }
-
-  const liveAndAtThePosKnightName = R.pipe(
-    R.keys,
-    R.head
-  )(liveAndAtThePosKnight);
-
-  if (game[instruction.knight][3] + 0.5 > liveAndAtThePosKnight[liveAndAtThePosKnightName][4]) {
-    const deadKnight = R.update(1, 'DEAD', liveAndAtThePosKnight[liveAndAtThePosKnightName]);
-    const gameWithEquippedKnights = R.set(R.lensProp(liveAndAtThePosKnightName), deadKnight, game);
-    return gameWithEquippedKnights;
-  }
-
-  const deadKnight = R.update(1, 'DEAD', game[instruction.knight]);
-  const gameWithEquippedKnights = R.set(R.lensProp(instruction.knight), deadKnight, game);
-  return gameWithEquippedKnights
 }
 
 const play = (game, instruction) => {

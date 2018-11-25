@@ -12,11 +12,14 @@ const KNIGHT_NAMES = R.values(KNIGHT_NAME_MAPPING);
 const EQUIPMENTS = {
   axe: {
     attack: 2,
+    defence: 0,
   },
   dagger: {
     attack: 1,
+    defence: 0,
   },
   helmet: {
+    attack: 0,
     defence: 1,
   },
   magic_staff: {
@@ -26,8 +29,10 @@ const EQUIPMENTS = {
 };
 const EQUIPMENT_NAMES = R.keys(EQUIPMENTS);
 const EQUIPMENT_PRIORITIES = ['axe', 'magic_staff', 'dagger', 'helmet'];
+const ATTACKER_ADVANTAGE = 0.5;
 
 export {
+  ATTACKER_ADVANTAGE,
   EQUIPMENT_NAMES,
   EQUIPMENT_PRIORITIES,
   EQUIPMENTS,

@@ -63,5 +63,27 @@ describe('Instruction', () => {
       expect(gameAfterFirstPlay.green).to.eql([[6, 6], 'LIVE', null, 1, 1]);
       expect(gameAfterFirstPlay.red).to.eql([[6, 6], 'DEAD', null, 1, 1]);
     });
+
+    it('should allow fight with equipment', async () => {
+      const newGame = initialize();
+      newGame.green = [[5, 5], 'LIVE', null, 1, 1];
+      newGame.red = [[4, 5], 'LIVE', 'helmet', 1, 1];
+      const gameAfterFirstPlay = play(newGame, {knight: 'green', direction: 'N'});
+      expect(gameAfterFirstPlay.green).to.eql([[4, 5], 'DEAD', null, 1, 1]);
+      expect(gameAfterFirstPlay.red).to.eql([[4, 5], 'LIVE', 'helmet', 1, 1]);
+    });
+
+    it('should allow fight with equipment', async () => {
+      const newGame = initialize();
+      newGame.green = [[4, 5], 'LIVE', 'dagger', 1, 1];
+      newGame.red = [[4, 4], 'LIVE', 'axe', 1, 1];
+      newGame.dagger = [[4, 5], true];
+      newGame.axe = [[4, 4], true];
+      const gameAfterFirstPlay = play(newGame, {knight: 'green', direction: 'W'});
+      expect(gameAfterFirstPlay.green).to.eql([[4, 4], 'LIVE', 'dagger', 1, 1]);
+      expect(gameAfterFirstPlay.red).to.eql([[4, 4], 'DEAD', null, 1, 1]);
+      expect(gameAfterFirstPlay.dagger).to.eql([[4, 4], true]);
+      expect(gameAfterFirstPlay.axe).to.eql([[4, 4], false]);
+    });
   });
 });
